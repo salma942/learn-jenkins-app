@@ -6,7 +6,30 @@ pipeline {
             steps {       // Étapes à exécuter
                 sh """
                     echo "Hello World"
+                    ls -la
                 """
+            }
+        }
+        stage('docker'){
+            agent
+            { docker
+             { image 'node:18-alpine'
+
+            }
+            }
+
+            steps{
+                sh """
+                 ls -la 
+                 echo hello word 
+                 node --version 
+                 npm --version 
+                 npm ci
+                 npm  run build
+                  
+                """
+
+
             }
         }
     }
