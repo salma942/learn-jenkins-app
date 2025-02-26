@@ -10,27 +10,35 @@ pipeline {
                 """
             }
         }
-        stage('docker'){
-            agent
-            { docker
-             { image 'node:18-alpine'
+        
+        stage('Docker Build') {
+            agent { docker { image 'node:18-alpine' } }  // Exécuter dans un conteneur Node.js
 
-            }
-            }
-
-            steps{
+            steps {
                 sh """
-                 ls -la 
-                 echo hello word 
-                 node --version 
-                 npm --version 
-                 npm ci
-                 npm  run build
-                  
+                    echo "Affichage du contenu du répertoire"
+                    ls -la 
+                    
+                    echo "Vérification des versions"
+                    node --version 
+                    npm --version 
+                    
+                    echo "Installation des dépendances"
+                    npm ci
+                    
+                    echo "Build du projet"
+                    npm run build
                 """
-
-
             }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline terminée 🚀"
+        }
+        failure {
+            echo "Une erreur est survenue ❌"
         }
     }
 }
