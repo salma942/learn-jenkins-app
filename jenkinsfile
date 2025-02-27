@@ -12,7 +12,8 @@ pipeline {
         }
         
         stage('Docker Build') {
-            agent { docker { image 'node:18-alpine' } }  // Exécuter dans un conteneur Node.js
+            agent { docker { image 'node:18-alpine' } 
+            reuseNode true}  // Exécuter dans un conteneur Node.js
 
             steps {
                 sh """
@@ -29,6 +30,20 @@ pipeline {
                     echo "Build du projet"
                     npm run build
                     npm start 
+                """
+            }
+        }
+        stage("Test"){
+            agent{
+                docker{
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps{
+                sh """
+
+                   npm test 
                 """
             }
         }
