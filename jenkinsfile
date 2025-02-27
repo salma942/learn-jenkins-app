@@ -12,8 +12,10 @@ pipeline {
         }
         
         stage('Docker Build') {
-            agent { docker { image 'node:18-alpine' } 
-            reuseNode true}  // Exécuter dans un conteneur Node.js
+            agent { docker
+             { image 'node:18-alpine' 
+              reuseNode true} 
+           }  // Exécuter dans un conteneur Node.js
 
             steps {
                 sh """
