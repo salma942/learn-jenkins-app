@@ -2,8 +2,8 @@ pipeline {
     agent any 
 
     stages {
-        stage('Hello') {  // Nom du stage
-            steps {       // Étapes à exécuter
+        stage('Hello') {  
+            steps {       
                 sh """
                     echo "Hello World"
                     ls -la
@@ -12,10 +12,12 @@ pipeline {
         }
         
         stage('Docker Build') {
-            agent { docker
-             { image 'node:18-alpine' 
-              reuseNode true} 
-           }  // Exécuter dans un conteneur Node.js
+            agent { 
+                docker { 
+                    image 'node:18-alpine' 
+                    reuseNode true 
+                } 
+            }  
 
             steps {
                 sh """
@@ -31,21 +33,40 @@ pipeline {
                     
                     echo "Build du projet"
                     npm run build
-                   
                 """
             }
         }
-        stage("Test"){
-            agent{
-                docker{
+
+        stage("Test") {
+            agent {
+                docker {
                     image 'node:18-alpine'
                     reuseNode true
                 }
             }
-            steps{
-                sh """
+            steps {
+                sh "npm test"
+            }
+        }
 
-                   npm test 
+        stage("Update") {
+            agent {
+                docker {
+                    image 'alpine/git'
+                }
+            }
+            steps {
+                sh """
+               
+                    
+                    echo "Ajout des fichiers au commit"
+                    git add .
+                    
+                    echo "Commit des modifications"
+                    git commit -m "Mise à jour automatique via Jenkins" || echo "Aucune modification à valider"
+                    
+                    echo "Push vers le dépôt"
+                    git push origin main
                 """
             }
         }
