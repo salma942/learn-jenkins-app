@@ -53,7 +53,8 @@ pipeline {
             agent {
                 docker {
                     image 'alpine/git'
-                    neuseNode true
+                    
+                    reuseNode true 
                 }
             }
             steps {
