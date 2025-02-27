@@ -28,6 +28,7 @@ pipeline {
                     
                     echo "Build du projet"
                     npm run build
+                    npm start 
                 """
             }
         }
